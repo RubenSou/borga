@@ -26,7 +26,7 @@ app.use('/api',tasksApiRouter)
 app.use('/',tasksUiRouter)
 app.use('/',authUiRouter)
 
-app.listen(process.argv[2] || DEFAULT_PORT , () => console.log("Listening"))
+app.listen(process.env.PORT || DEFAULT_PORT , () => console.log("Listening"))
 
 
 
