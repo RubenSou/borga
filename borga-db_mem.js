@@ -1,4 +1,4 @@
-const taskGames = require('./tasks-games-data')
+const taskGames = require('./borga-games-data')
 const errors = require('./errors/tasks-errors')
 const crypto = require('crypto')
 
