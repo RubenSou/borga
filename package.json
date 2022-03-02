@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "node borga-server.js"
   },
   "keywords": [],
   "author": "",
