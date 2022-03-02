@@ -1,0 +1,376 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Tasks API
+  description: This is a simple Tasks API
+  # put the contact info for your development or API team
+  contact:
+    email: you@your-company.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    
+tags :
+  - name: users
+  - name: game
+  - name: group
+  
+
+paths:
+  /users:
+    post:                                                        
+      summary: adds a user
+      operationId: addUser
+      description: Adds a user to the system
+      tags:
+      - users
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: body
+          name: userName
+          description: User to add
+          schema:
+            $ref: '#/definitions/NewUser'
+      responses:
+        201:
+          description: user created
+          schema:
+            type: object
+            required:
+              - token
+            properties:
+              token:
+                type: string
+                format: uuid
+        400:
+          description: Invalid input, object invalid
+  /game: 
+    get:                                                      
+      summary: get games
+      operationId: getGames
+      description: Get the list of the most popular games
+      tags:  
+      - game
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: query
+        name: nameOfGame
+        required: false
+        type: string
+        name: gameID
+        required: false
+        type: string 
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Game'
+        400:
+          description: bad input parameter
+  /group/game/{groupID}: 
+    get:                                                                                                    
+      summary: get games
+      operationId: getFavoriteGames
+      description: Get the list of the most popular games in a Group
+      tags:
+      - group  
+      - game
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: path
+        name: groupID
+        description: ID of the group to be changed
+        required: true
+        type: integer
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+        400:
+          description: bad input parameter
+  /group:
+    post:                                                  
+      summary: add a group
+      operationId: addGroup
+      description: Create group providing its name and description
+      tags:
+      - group
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: body
+        name: userId
+        description: ID of user
+        required: true
+        name: nameOfGroup
+        description: Group to add
+        required: true
+        name: description
+        description: description of group
+        type: string
+        required: true
+        schema:
+          $ref: '#/definitions/Group'
+      responses:
+        201:
+          description: Task created
+        400:
+          description: Invalid input, object invalid  
+    get:                                                         
+      summary: get groups
+      operationId: getGroups    
+      description: List all groups
+      tags:
+      - group
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+        400:
+          description: bad input parameter
+  /group/{groupID}:
+    put:                                                                
+      summary: updates a task
+      operationId: updateGroup
+      description: Edit group by changing its name and description
+      tags:
+      - group
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: path
+        name: groupID
+        description: ID of the group to be changed
+        required: true
+        type: integer
+      - in: body
+        name: nameOfGroup
+        description: Group to change
+        required: true
+        name: description
+        description: description of group
+        type: string
+        required: true
+        schema:
+          $ref: '#/definitions/Group'
+      responses:
+        201:
+          description: task created
+        404:
+          description: Task not found
+    delete:                                                
+      summary: Delete a group by ID
+      description: Delete a group by ID
+      operationId: deleteGroup
+      tags:
+      - group
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: path
+        name: groupID
+        description: ID of the group to be deleted
+        required: true
+        type: integer
+      responses:
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Task not found
+    post:                                                 
+      summary: adds a game
+      operationId: addGame
+      description: Adds a game to the Group
+      tags:
+      - group
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: path
+        name: groupID
+        description: ID of the group to add the Game
+        required: true
+        type: integer
+      - in: body
+        name: gameID
+        description: Game to add
+        required: true
+        type: string
+        schema:
+          $ref: '#/definitions/Game'
+      responses:
+        201:
+          description: Task created
+        400:
+          description: Invalid input, object invalid 
+    get:                                                   
+      summary:  Get the details of a Group  
+      operationId: getGroup
+      description: Get the details of a group, with its name, description and names of the included games
+      tags:
+      - group
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: path
+        name: groupID
+        description: ID of the group to return
+        required: true
+        type: integer
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+        400:
+          description: bad input parameter
+      
+  /group/{groupID}/{gameID}:  
+    delete:                                                         
+      summary: Remove a game from a group
+      description: Remove a game from a group by ID's
+      operationId: deleteGame
+      tags:
+      - group
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type : string
+        format : uuid
+      - in: path
+        name: groupID
+        description: ID of the group where the game is
+        required: true
+        type: integer
+      - in: path
+        name: gameID
+        description: ID of the game to be deleted
+        required: true
+        type: integer
+      responses:
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Task not found
+        
+  
+definitions:
+  
+  Group:
+    type: object
+    required:
+    - nameOfGroup
+    - description
+    - games
+    - userId
+    properties:
+      userId:
+        type: integer
+        example: 11
+      id:
+        type: integer
+        example: 1
+      nameOfGroup:
+        type: string
+        example: Action Games
+      description:
+        type: string
+        example: Games with action
+      games:
+        type: array
+        items:
+          $ref: '#/definitions/Game'
+        
+  Game: 
+    type: object
+    required:
+    - gameid
+    - gameName
+    properties:
+      id:
+        type: string
+        example: TAAifFP590
+      gameName:
+        type: string
+        example: Catan
+  
+  NewUser:
+    type: object
+    required:
+    - userName
+    - userId
+    properties:
+      userName:
+        type: string
+        example: joao
+      userId:
+        type: string
+        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6        

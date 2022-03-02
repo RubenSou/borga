@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="stylesheets/styles.css">
+        <title>Menu</title>
+        <meta charset="utf-8">
+        {{#if scriptName}}
+            <script type='text/javascript' src="/javascripts/{{scriptName}}.js"></script>
+        {{/if}}
+    </head>
+    <body>
+        <header>
+            <nav class = "nav main-nav">
+                <ul>
+                    {{#if username}}
+                    <li><a href="/"> Home </a></li> 
+                    <li><a href="/game">Games List</a></li> 
+                    <li><a href="/group">Group List</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                        <form method="post" action="/logout">
+                            <input type="submit" value="Logout">
+                        </form>
+                    {{else}}
+                        <li><a href="/"> Home </a></li> 
+                        <li><a href="/login"> Login </a></li>
+                        <li><a href="/register">Sign In</a></li>
+                    {{/if}}    
+            </nav>
+            <h1 class="band-name band-name-large">Programação na Internet</h1>
+        </header>    
+        {{{body}}}
+    </body>
+</html>

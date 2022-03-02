@@ -1,0 +1,85 @@
+{{#if scriptName}}
+  <head>
+    <script type='text/javascript' src="../public/javascripts/{{scriptName}}.js"></script>
+  </head>
+{{/if}}
+<section class="content-section"> 
+  <form method="Get" action="/game">     
+    <tr>
+      <h1>Obter Jogos da API:</h1>
+      <div><label for="textInput">Game:</label>
+        <input type="text" id ="textInput" name="nameOfGame" placeholder="Name of Game" required/></div>
+      <br>
+      <input type="submit" ID="GTable"/>
+      <br>
+    </tr>
+  </form>
+</section>    
+<br>
+<section class="content-section">    
+  <table class="table" cellpadding="5px" cellspacing="0">
+    <thead class="thead-light">
+      <h1>Jogos</h1>
+      {{#if groupID}}
+      <tr>
+        <th>Identifier</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Url</th>
+        <th>Image_url</th>
+        <th>Mechanics</th>
+        <th>Categories</th>
+        <th>Option</th>
+      </tr>
+      
+      {{#each games}}
+        <tr>
+          <td>{{id}}</td>  
+          <td>{{name}}</td>
+          <td><textarea name="a" id="a" cols="30" rows="10">{{description}}</textarea></td>
+          <td><a href="{{url}}">{{url}}</a></td>
+          <td><img class"giant-pic" src="{{image_url}}"></td>
+          <td><textarea name="b" id="b" cols="10" rows="5">{{mechanics}}</textarea></td>
+          <td><textarea name="c" id="c" cols="10" rows="5">{{categories}}</textarea></td>
+          <td>
+            <form method="Post" action="/game">  
+              <input type="hidden"  value="{{id}}" name="id"/></div>
+              <input type="hidden"  value="{{name}}" name="name" /></div>
+              <input type="hidden"  value="{{description}}" name="description" /></div>
+              <input type="hidden"  value="{{url}}" name="url"/></div>
+              <input type="hidden"  value="{{image_url}}" name="image_url" /></div>
+              <input type="hidden"  value="{{mechanics}}" name="mechanics" /></div>
+              <input type="hidden"  value="{{categories}}" name="categories"/></div>
+              <br>
+              <input type="submit" value="Add Game" ID="alter"/>
+            </form>
+           </td>
+        </tr>
+      {{/each}}
+      {{else}}
+        <tr>
+          <th>Identifier</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Url</th>
+          <th>Image_url</th>
+          <th>Mechanics</th>
+          <th>Categories</th>
+        </tr>
+      
+      {{#each games}}
+        <tr>
+            <td>{{id}}</td>  
+            <td>{{name}}</td>
+            <td><textarea name="a" id="a" cols="30" rows="10">{{description}}</textarea></td>
+            <td><a href="{{url}}">{{url}}</a></td>
+            <td><img class"giant-pic" src="{{image_url}}"></td>
+            <td><textarea name="b" id="b" cols="10" rows="5">{{mechanics}}</textarea></td>
+            <td><textarea name="c" id="c" cols="10" rows="5">{{categories}}</textarea></td>
+        </tr>
+      {{/each}}
+      {{/if}}
+    </thead>
+  </table>
+</section>
+ 

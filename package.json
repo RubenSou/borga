@@ -1,0 +1,23 @@
+{
+  "name": "assignment3",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "crypto-browserify": "^3.11.0",
+    "elasticsearch": "^16.7.2",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "hbs": "^4.2.0",
+    "jest": "^27.4.7",
+    "node-fetch": "^2.6.2",
+    "passport": "^0.5.2"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

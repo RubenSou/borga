@@ -1,0 +1,34 @@
+<section class="content-section container">    
+    <form method="Post" action="/group">  
+              <h1>Adicionar Grupo:</h1>
+              <p><label for="textInput">Group:</label>
+              <input type="text" id="textInput" name="nameOfGroup" placeholder="Name of Group" required/></p>
+              <p><label for="textInput">Description:</label>
+              <input type="text" id="textInput" name="description" placeholder="Description of Group" required/></p>
+              <br>
+              <input type="submit"/>
+    </form>
+</section>        
+    
+<section class="another-content-section container">      
+  <table class="w3-table w3-striped" cellpadding="5px" cellspacing="0">
+      <h1>Grupos</h1>
+      <tr>
+        <th>Identifier</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
+        <th></th>
+      </tr>
+      {{#each groups}}
+        <tr id="grouprow_{{id}}" >
+          <td><a href="/games/{{id}}" name="groupID">{{id}}</a></td>
+          <td>{{nameOfGroup}}</td>
+          <td>{{description}}</td>
+          <td><a href="group/update/{{id}}/{{nameOfGroup}}">Update Group</a></td>
+          <td><button id="btn_group_{{id}}"> Delete Group</button></td>
+        </tr>
+      {{/each}}
+  </table>
+</section>
+ 
