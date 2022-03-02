@@ -1,7 +1,7 @@
 {
-  "name": "borga",
+  "name": "assignment3",
   "version": "1.0.0",
-  "main": "borga-server.js",
+  "main": "server.js",
   "dependencies": {
     "crypto-browserify": "^3.11.0",
     "elasticsearch": "^16.7.2",
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "node borga-server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
