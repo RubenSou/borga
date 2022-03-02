@@ -71,10 +71,8 @@ function getFavoriteGames(groupID,userToken){
      * buscarmos o userId
      */
 function getGroups(userToken){  
-     //console.log(userToken)
      return data.getUserByToken(userToken)
           .then(user => {
-               console.log(user)
                return data.getGroupsByUserId(user.id)
           })
 }
@@ -134,8 +132,7 @@ function addGame(gameInfo,groupId,userToken){ //fazer de forma a não ter a vari
 function validateUser(username, password){
      return data.getUserByUsername(username)
             .then(user => {
-                 //console.log(user)
-                 if(password == user.password) return Promise.resolve({userName : username , token : user.token})
+                 if(password == user[0].password) return Promise.resolve({userName : username , password : password, token : user[0].token, email: user[0].email})
                  //else return Promise.reject(errors.INVALID_CREDENTIALS())
             })
  }

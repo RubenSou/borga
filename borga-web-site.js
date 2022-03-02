@@ -11,7 +11,7 @@ module.exports = function(router, tasksServices){
     router.get('/', getHomePage)
     router.get('/game',getGames)
     router.get('/games/:groupID',getFavoriteGames)
-    router.get('/games/:groupID/:gameID',getGame)
+    router.get('/games/:groupID/:gameID',getFavoriteGames)
     router.get('/group',getGroups)
     router.get('/group/:groupID',getGroup)
     router.get('/group/update/:id/:nameOfGroup', getUpdatedGroup)
@@ -39,17 +39,18 @@ module.exports = function(router, tasksServices){
     }
 
     async function getFavoriteGames(req, resp){
-        idOfGroup = req.params.groupID
-        const gamesOfGroup = await tasksServices.getFavoriteGames(req.params.groupID,req.user.token)
+        if(req.params.groupID < 100) idOfGroup = req.params.groupID
+        const gamesOfGroup = await tasksServices.getFavoriteGames(idOfGroup,req.user.token)
         resp.render("games-group", {gamesOfGroups : gamesOfGroup,username : getUserName(req)})
     }
 
     async function getGroups(req, resp){
+        console.log(req.user)
         const groups = await tasksServices.getGroups(req.user.token)
         resp.render("groups-list", {groups : groups, username : getUserName(req)})
     }
 
-    async function getGroup(req, resp){
+    async function getGroup(req, resp){ 
         const group = await tasksServices.getGroup(req.params.groupID,req.user.token)  
         resp.render("group", {group : group, username : getUserName(req)})
     }

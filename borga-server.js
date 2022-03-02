@@ -6,7 +6,7 @@ const path = require('path')
 const express = require('express')
 const app = express()
 
-const tasksData = require('./borga-db_mem')
+const tasksData = require('./borga-db.js')
 const tasksServices = require('./borga-services.js')(tasksData)
 const tasksApiRouter = require('./borga-web-api.js')(express.Router(),tasksServices)
 const tasksUiRouter = require('./borga-web-site.js')(express.Router(), tasksServices)

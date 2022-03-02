@@ -3,24 +3,27 @@ const errors = require('./errors/tasks-errors')
 const crypto = require('crypto')
 
 const users = [
-    {id : 11, userName : "Filipe", token : "3fa85f64-5717-4562-b3fc-2c963f66afa6"},
-    {id : 12, userName : "Joao", token : "3fa85f64-5717-4562-b3fc-2c963f66afa7" }
+    {id : "11", userName : "Ruben", password : "RubenSousa1", token : "3fa85f64-5717-4562-b3fc-2c963f66afa6", email : "ruben.msousa@gmail.com"},
+    {id : "12", userName : "Filipe", password : "Filipe1", token : "3fa85f64-4562-5717-b3fc-2c963f66afa6", email : "ffreitas@cc.isel.ipl.pt"}
 ]
 
-const games = [ [{id : "ABSSF122", name: "Roblox"},{id : "NFDND675", name : "Fortinite"}] , [{id : "ASDAHU7", name: "Mario"},{id : "WEHWE7", name : "Pacman"}] ] 
-
 const groups = [
-    {userID : 11, id : 1, nameOfGroup : "Action", description : "Action Games", games : games[0] },
-    {userID : 12, id : 2, nameOfGroup : "Arcade", description : "Arcade Games", games : games[1] }
-] 
+    {userId : "11", id : "1", nameOfGroup : "Arcade", description : "Arcade Games" },
+    {userId : "12",  id : "2", nameOfGroup : "Action", description : "Action Games" }
+]
 
-let userid = 13
+const games = [
+    {groupId : "1", nameOfGame : "Mario", id : "ASDAHU7"},
+    {groupId : "1", nameOfGame : "Pacman", id : "WEHWE7" }
+]
+
 
 module.exports = {
     addUser : addUser,
     getUserByToken : getUserByToken,
+    getUserByUsername : getUserByUsername,
     getFavoriteGames : getFavoriteGames,
-    getGroups : getGroups,
+    getGroupsByUserId : getGroupsByUserId,
     getGroup : getGroup,
     addGroup : addGroup,
     addGame : addGame,
@@ -29,104 +32,116 @@ module.exports = {
     deleteGroup : deleteGroup
 }
 
-function addUser(userName){
-    const newUserId = userid++
-    const newToken = crypto.randomUUID().toString()
-    const newUser = {id : newUserId, userName : userName, token : newToken}
-    users.push(newUser)
-    return Promise.resolve(users)
+function addUser(userInfo){ //FEITO
+    const newId = `${Math.floor(Math.random() *100)}`
+    const newAuth = crypto.randomUUID()
+
+    const newUser = {
+        id : `${newId}`,
+        userName : userInfo.username,
+        password : userInfo.password,
+        token : newAuth
+    }
+users.push(newUser)
+return Promise.resolve(newUser)
 }
 
-function getUserByToken(token){ 
-    const user = users.find(u => u.token == token)
-    if(!user) return Promise.reject(errors.NOT_FOUND(token))
-    return Promise.resolve(user)
+function getUserByToken(token){ //FEITO
+const user = users.find(u => u.token == token)
+if(!user) return Promise.reject(errors.NOT_FOUND(token))
+return Promise.resolve(user)
 }
 
 function getFavoriteGames(groupId,userId){
-    return getGroup(userId,groupId).then(group => group.map(group => group.games))
+return Promise.resolve(games.filter(game => game.groupId == groupId))
 }
 
-function getGroups(userId){
-    return Promise.resolve(groups.filter(group => group.userID == userId))
-    .catch(errors.NOT_FOUND(userId))
+function getGroupsByUserId(userId){ //FEITO
+return Promise.resolve(groups.filter(group => group.userId == userId))
+
 }
 
-function getGroup(userId,groupId){
-    const group = groups.filter(group => (group.userID == userId && group.id == groupId))
-    if(!group) return Promise.reject(errors.NOT_FOUND(token))
-    return Promise.resolve(group)
+function getGroup(userId,groupId){ //FEITO
+const group = groups.filter(group => (group.userID == userId && group.id == groupId))
+if(!group) return Promise.reject(errors.NOT_FOUND(token))
+return Promise.resolve(group)
 }
 
 function addGroup(userID, nameOfGroup, description){ 
-    const newId = groups.length+1
-    const newGroup = {userID : userID,id : newId,nameOfGroup : nameOfGroup, description : description, games : []}
-    groups.push(newGroup)
-    return Promise.resolve(newGroup)
+const newId = groups.length
+const newGroup = {userId : userID,id : newId, nameOfGroup : nameOfGroup, description : description}
+groups.push(newGroup)
+return Promise.resolve(newGroup)
 }
 
-function addGame(userId,groupId,gameID){ 
-    return getGroup(userId,groupId)
-        .then(group => {
-            return taskGames.fetchGamesById(gameID).then(game => {
-                const newGame = {id: game[0].id, name: game[0].name}
-                return newGame 
-            })
-            .then(newGame => { 
-                games[groupId-1].push(newGame)
-                return games[groupId-1]                                           
-            })
-            .then(games => {
-                return group.map(groupWithOldGames => {
-                    groupWithOldGames.games = games
-                    return groupWithOldGames.games
-                })
-            })
-        })
-        .catch(errors.NOT_FOUND(groupId))
+function addGame(groupId,gameInfo){ //FEITO
+const newGame = {
+    id : `${gameInfo.id}`,
+    name : `${gameInfo.name}`,
+    description : `${gameInfo.description}`,
+    url : `${gameInfo.url}`,
+    image_url : `${gameInfo.image_url}`,
+    mechanics : `${gameInfo.mechanics}`,
+    categories : `${gameInfo.categories}`,
+    groupId :`${groupId}`
+}         
+games.push(newGame)
+return Promise.resolve(newGame)
+    .catch(errors.NOT_FOUND(groupId))
 }
 
 function updateGroup(userId,groupId,nameOfGroup,description){ 
-    return getGroup(userId,groupId)
-    .then(group => {
-        group.map(group => {group.nameOfGroup = nameOfGroup
-            group.description = description})
-        return group
-    })
-    .catch(errors.NOT_FOUND(groupId))
+return getGroup(userId,groupId)
+.then(group => {
+    group.map(group => {group.nameOfGroup = nameOfGroup
+        group.description = description})
+    return group
+})
+.catch(errors.NOT_FOUND(groupId))
 }
 
 function deleteGroup(userId,groupId){
-    const idx = groups.findIndex( gr => gr.id == groupId)
-    groups.splice(idx, 1)
-    console.log(groups)
-    return getGroup(userId)
-        .catch(errors.NOT_FOUND(groupId))
+const idx = groups.findIndex( gr => gr.id == groupId)
+groups.splice(idx, 1)
+console.log(groups)
+return getGroup(userId)
+    .catch(errors.NOT_FOUND(groupId))
 }  
 
 function deleteGame(userId,groupId,gameId){
-    var idx = 0
-    var updatedGames = []
-    games.map(games => {
-        idx++
-        if(idx == groupId) {
-            updatedGames.push(games.filter(game => game.id != gameId))
-        }
-        else updatedGames.push(games)
+var idx = 0
+var updatedGames = []
+games.map(games => {
+    idx++
+    if(idx == groupId) {
+        updatedGames.push(games.filter(game => game.id != gameId))
+    }
+    else updatedGames.push(games)
+})
+return getGroup(userId,groupId)  
+.then(group => {
+    games.map(gamess => {
+        const index = games.indexOf(gamess)
+        games[index] = updatedGames[index] 
+        return games    
     })
-    return getGroup(userId,groupId)
-    .then(group => {
-        games.map(gamess => {
-            const index = games.indexOf(gamess)
-            games[index] = updatedGames[index] 
-            return games    
-        })
-        return group.map(group => {
-            group.games = games[groupId-1]
-            return group
-        })    
-    })
-    .catch(errors.NOT_FOUND(groupId))
+    return group.map(group => {
+        group.games = games[groupId-1]
+        return group
+    })    
+})
+.catch(errors.NOT_FOUND(groupId))
 }
 
+function getUserByUsername(username){ //FEITO
+return Promise.resolve(users.filter(user => {
+    if(user.userName == username) {
+     return user
+    }
+}))
+}
+
+/*function getGame(groupId,gameId){ 
+
+}*/
 
