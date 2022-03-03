@@ -19,8 +19,8 @@ module.exports = function(router, tasksServices){
     router.post('/user',addUser)
     router.post('/group', addGroup)
     router.post('/game',addGame)
-    router.delete('/group/:groupID',deleteGroup)
-    router.delete('/group/:groupID/:gameID',deleteGame)
+    router.get('/group/delete/:groupID',deleteGroup)
+    router.get('/group/delete/:groupID/:gameID',deleteGame)
 
     return router
 
@@ -45,7 +45,6 @@ module.exports = function(router, tasksServices){
     }
 
     async function getGroups(req, resp){
-        console.log(req.user)
         const groups = await tasksServices.getGroups(req.user.token)
         resp.render("groups-list", {groups : groups, username : getUserName(req)})
     }
@@ -79,13 +78,16 @@ module.exports = function(router, tasksServices){
         resp.redirect(303,`/`)
     }
     async function deleteGroup(req, resp){ 
-        const delGroup = await tasksServices.getGroup(req.params.id, req.user.token)
-        resp.redirect(303, `/group`)
+        console.log(req.user)
+        const groups = await tasksServices.deleteGroup(req.user.token, req.params.groupID)
+        //resp.render("groups-list", {groups : groups, username : getUserName(req)})
+        resp.redirect(303,`/group`)
     }
 
     async function deleteGame(req, resp){ 
-        const game = await tasksServices.getGame(req.params.groupID,req.params.gameID,req.user.token)
-        resp.redirect(303, `game/${req.params.groupID}`)
+        const gamesOfGroup = await tasksServices.deleteGame(req.params.groupID,req.params.gameID,req.user.token)
+        //resp.render("games-group", {gamesOfGroups : gamesOfGroup,username : getUserName(req)})
+        resp.redirect(303,`/games/${game.groupId}`)
     }  
 }
 

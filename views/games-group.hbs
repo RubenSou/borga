@@ -259,7 +259,6 @@ font-size: .8rem;
       <th>Image_url</th>
       <th>Mechanics</th>
       <th>Categories</th>
-      <th></th>
     </tr>
 {{#each gamesOfGroups}}
     <tr id="gamerow_{{id}}" >
@@ -271,7 +270,12 @@ font-size: .8rem;
       <td><img class"giant-pic" src="{{image_url}}"></td>
       <td><textarea name="b" id="b" cols="10" rows="5">{{mechanics}}</textarea></td>
       <td><textarea name="c" id="c" cols="10" rows="5">{{categories}}</textarea></td>
-      <td><button id="btn_game_{{id}}_{{groupId}}"> Delete Game</button></td>
+      <td>
+              <form method="Get" action="/group/delete/{{groupId}}/{{id}}">     
+                <tr>
+                  <input type="submit" value="Delete Game {{id}}" ID="GTable"/>
+                </tr>
+              </form>
     </tr>   
 {{/each}}
   </table>

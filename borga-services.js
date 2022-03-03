@@ -155,17 +155,24 @@ function updateGroup(groupId,nameOfGroup,description,userToken){// mudar de form
      * utilizada na busca do userId localizadas no file task-db_mem.js
      * @param groupId e @param token na chamada da função para filtrar o grupo com o id e userID especificos
      */
-function deleteGroup(groupId){
-    return data.deleteGroup(user.id,groupId)
+function deleteGroup(userToken,groupId){
+     return data.getUserByToken(userToken)
+     .then(user => {
+          return data.deleteGroup(user.id,groupId)
+     })
 }
+
 
 /**
      * Elimina o Object game especifico situado no Array games usando as @function deleteGame e @function getUserByToken 
      * utilizada na busca do userId localizadas no file task-db_mem.js
      * @param groupId e @param gameId na chamada da função para filtrar o game localizado no grupo com cada um dos especificos id's
      */
-function deleteGame(groupId,gameId){
-    return data.deleteGame(user.id,groupId,gameId)
+function deleteGame(userToken,groupId,gameId){
+     return data.getUserByToken(userToken)
+     .then(user => {
+          return data.deleteGame(user.id,groupId,gameId)
+     })
 }
 
 

@@ -309,36 +309,15 @@ function updateGroup(userId,groupId,nameOfGroup,description){
 }
 
 function deleteGroup(userId,groupId){
-    const idx = groups.findIndex( gr => gr.id == groupId)
+    const idx = groups.findIndex( gr => gr.id == groupId && gr.userId == userId)
     groups.splice(idx, 1)
-    console.log(groups)
-    return getGroup(userId)
-        .catch(errors.NOT_FOUND(groupId))
+    return Promise.resolve(groups)
 }  
 
 function deleteGame(userId,groupId,gameId){
-    var idx = 0
-    var updatedGames = []
-    games.map(games => {
-        idx++
-        if(idx == groupId) {
-            updatedGames.push(games.filter(game => game.id != gameId))
-        }
-        else updatedGames.push(games)
-    })
-    return getGroup(userId,groupId)  
-    .then(group => {
-        games.map(gamess => {
-            const index = games.indexOf(gamess)
-            games[index] = updatedGames[index] 
-            return games    
-        })
-        return group.map(group => {
-            group.games = games[groupId-1]
-            return group
-        })    
-    })
-    .catch(errors.NOT_FOUND(groupId))
+    const idx = games.findIndex( gr => gr.id == gameId && gr.groupId == groupId)
+    games.splice(idx, 1)
+    return Promise.resolve(games.filter(game => game.groupId == groupId))
 }
 
 function getUserByUsername(username){ //FEITO

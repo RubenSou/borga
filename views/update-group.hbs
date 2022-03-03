@@ -242,13 +242,11 @@ font-size: .8rem;
 
 </style>
 
-{{#if scriptName}}
   <head>
     <script type='text/javascript' src="../public/javascripts/{{scriptName}}.js"></script>
   </head>
-{{/if}}
 
-<section>
+<section class="content-section container">
   <div class="painel-superior">
     {{#each group}}
       <h3>Update Group</h3>
@@ -258,6 +256,5 @@ font-size: .8rem;
       <p id="demo">Click me.</p>
 
       <p> <button id="btn_update"> Update </button></p>
-    {{/each}}
   </div>
 </section>
